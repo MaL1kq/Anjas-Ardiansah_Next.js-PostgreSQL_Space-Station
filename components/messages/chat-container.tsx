@@ -23,6 +23,7 @@ interface Message {
   receiverId: string;
   createdAt: string;
   isRead: boolean;
+  isDeleted?: boolean;
   sender: {
     id: string;
     name: string | null;
@@ -118,6 +119,25 @@ export function ChatContainer({
     }
   };
 
+  const handleDelete = async (messageId: string) => {
+    try {
+      const res = await fetch(`/api/messages/delete/${messageId}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        // Update the message in state to show as deleted
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId ? { ...msg, isDeleted: true } : msg
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting message:", error);
+    }
+  };
+
   const handleReply = (message: Message) => {
     setReplyTo({
       id: message.id,
@@ -171,14 +191,29 @@ export function ChatContainer({
           </div>
         ) : (
           <>
-            {messages.map((message) => (
-              <MessageBubble
-                key={message.id}
-                message={message}
-                isOwn={message.senderId === currentUserId}
-                onReply={handleReply}
-              />
-            ))}
+            {messages.map((message, index) => {
+              const messageDate = new Date(message.createdAt);
+              const prevMessage = index > 0 ? messages[index - 1] : null;
+              const prevDate = prevMessage ? new Date(prevMessage.createdAt) : null;
+              
+              // Check if we need to show date separator
+              const showDateSeparator = !prevDate || 
+                messageDate.toDateString() !== prevDate.toDateString();
+
+              return (
+                <div key={message.id}>
+                  {showDateSeparator && (
+                    <DateSeparator date={messageDate} />
+                  )}
+                  <MessageBubble
+                    message={message}
+                    isOwn={message.senderId === currentUserId}
+                    onReply={handleReply}
+                    onDelete={handleDelete}
+                  />
+                </div>
+              );
+            })}
             <div ref={messagesEndRef} />
           </>
         )}
@@ -191,6 +226,50 @@ export function ChatContainer({
         onCancelReply={() => setReplyTo(null)}
         disabled={sending}
       />
+    </div>
+  );
+}
+
+// Date Separator Component
+function DateSeparator({ date }: { date: Date }) {
+  const formatDateLabel = (date: Date): string => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    const messageDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    // Hari ini
+    if (messageDay.getTime() === today.getTime()) {
+      return "Hari ini";
+    }
+    
+    // Kemarin
+    if (messageDay.getTime() === yesterday.getTime()) {
+      return "Kemarin";
+    }
+    
+    // Dalam 7 hari terakhir - tampilkan nama hari
+    const diffDays = Math.floor((today.getTime() - messageDay.getTime()) / (1000 * 60 * 60 * 24));
+    if (diffDays < 7) {
+      const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      return days[date.getDay()];
+    }
+    
+    // Lebih dari 7 hari - tampilkan tanggal lengkap
+    const months = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  };
+
+  return (
+    <div className="flex justify-center my-4">
+      <span className="px-4 py-1 bg-slate-800/80 text-slate-300 text-xs rounded-full">
+        {formatDateLabel(date)}
+      </span>
     </div>
   );
 }

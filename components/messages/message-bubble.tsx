@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Copy, Reply, Check, User } from "lucide-react";
+import { Copy, Reply, Check, User, Trash2, Ban } from "lucide-react";
 
 interface ReplyInfo {
   id: string;
@@ -19,6 +19,7 @@ interface Message {
   receiverId: string;
   createdAt: string;
   isRead: boolean;
+  isDeleted?: boolean;
   sender: {
     id: string;
     name: string | null;
@@ -38,11 +39,13 @@ interface MessageBubbleProps {
   message: Message;
   isOwn: boolean;
   onReply: (message: Message) => void;
+  onDelete: (messageId: string) => void;
 }
 
-export function MessageBubble({ message, isOwn, onReply }: MessageBubbleProps) {
+export function MessageBubble({ message, isOwn, onReply, onDelete }: MessageBubbleProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,12 +77,56 @@ export function MessageBubble({ message, isOwn, onReply }: MessageBubbleProps) {
     setShowMenu(false);
   };
 
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      await onDelete(message.id);
+    } finally {
+      setDeleting(false);
+      setShowMenu(false);
+    }
+  };
+
   const formatTime = (date: string) => {
     return new Date(date).toLocaleTimeString("id-ID", {
       hour: "2-digit",
       minute: "2-digit",
     });
   };
+
+  // If message is deleted, show "Pesan ini dihapus"
+  if (message.isDeleted) {
+    return (
+      <div
+        className={`flex ${isOwn ? "justify-end" : "justify-start"} mb-3`}
+      >
+        <div className={`flex items-end gap-2 max-w-[75%] ${isOwn ? "flex-row-reverse" : ""}`}>
+          {/* Avatar */}
+          {!isOwn && (
+            <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0">
+              <User className="w-4 h-4 text-slate-500" />
+            </div>
+          )}
+
+          <div
+            className={`rounded-2xl px-4 py-2 ${
+              isOwn
+                ? "bg-slate-700/50 rounded-br-sm"
+                : "bg-slate-800/50 rounded-bl-sm"
+            }`}
+          >
+            <p className="text-slate-400 italic flex items-center gap-2">
+              <Ban className="w-4 h-4" />
+              Pesan ini dihapus
+            </p>
+            <div className={`flex items-center gap-1 mt-1 ${isOwn ? "justify-end" : "justify-start"}`}>
+              <span className="text-xs text-slate-500">{formatTime(message.createdAt)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -161,6 +208,17 @@ export function MessageBubble({ message, isOwn, onReply }: MessageBubbleProps) {
                   </>
                 )}
               </button>
+              {/* Only show delete for own messages */}
+              {isOwn && (
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-400 hover:bg-slate-700 transition disabled:opacity-50"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {deleting ? "Menghapus..." : "Hapus"}
+                </button>
+              )}
             </div>
           )}
         </div>

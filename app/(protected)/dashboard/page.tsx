@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { SignOutButton } from "@/components/auth/signout-button";
 import SpaceBackground from "@/components/space-background";
@@ -15,11 +14,8 @@ import {
 import Link from "next/link";
 
 export default async function DashboardPage() {
-  const session = await auth();
-
-  if (!session) {
-    redirect("/login");
-  }
+  // Middleware sudah memastikan user login
+  const session = (await auth())!;
 
   const stats = [
     { label: "Misi Selesai", value: "24", icon: Rocket, color: "text-purple-400" },

@@ -1,16 +1,8 @@
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-
-export default async function ProtectedLayout({
+export default function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-
-  if (!session) {
-    redirect("/login");
-  }
-
+  // Auth sudah dihandle oleh middleware
   return <>{children}</>;
 }

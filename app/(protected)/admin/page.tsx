@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { SignOutButton } from "@/components/auth/signout-button";
 import SpaceBackground from "@/components/space-background";
@@ -15,15 +14,8 @@ import {
 import Link from "next/link";
 
 export default async function AdminPage() {
-  const session = await auth();
-
-  if (!session) {
-    redirect("/login");
-  }
-
-  if (session.user.role !== "ADMIN") {
-    redirect("/dashboard");
-  }
+  // Middleware sudah memastikan user login dan adalah admin
+  const session = (await auth())!;
 
   // Get stats
   const totalUsers = await prisma.user.count();

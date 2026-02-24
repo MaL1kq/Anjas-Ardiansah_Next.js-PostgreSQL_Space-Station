@@ -97,6 +97,7 @@ export function AddMissionForm({ onClose }: AddMissionFormProps) {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-slate-400 hover:text-white"
+          aria-label="Tutup form"
         >
           <X className="w-5 h-5" />
         </button>
@@ -152,6 +153,7 @@ export function AddMissionForm({ onClose }: AddMissionFormProps) {
               accept="image/*"
               className="hidden"
               onChange={handleImageUpload}
+              aria-label="Upload gambar misi"
             />
           </div>
 
@@ -199,10 +201,11 @@ export function AddMissionForm({ onClose }: AddMissionFormProps) {
 
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-slate-300">
+              <label htmlFor="difficulty" className="block text-sm font-medium text-slate-300">
                 Kesulitan
               </label>
               <select
+                id="difficulty"
                 className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                 value={formData.difficulty}
                 onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}

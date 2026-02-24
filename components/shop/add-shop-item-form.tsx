@@ -97,6 +97,7 @@ export function AddShopItemForm({ onClose }: AddShopItemFormProps) {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-slate-400 hover:text-white"
+          aria-label="Tutup form"
         >
           <X className="w-5 h-5" />
         </button>
@@ -152,6 +153,7 @@ export function AddShopItemForm({ onClose }: AddShopItemFormProps) {
               accept="image/*"
               className="hidden"
               onChange={handleImageUpload}
+              aria-label="Upload gambar item"
             />
           </div>
 
@@ -187,8 +189,9 @@ export function AddShopItemForm({ onClose }: AddShopItemFormProps) {
             />
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-slate-300">Kategori</label>
+              <label htmlFor="category" className="block text-sm font-medium text-slate-300">Kategori</label>
               <select
+                id="category"
                 className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}

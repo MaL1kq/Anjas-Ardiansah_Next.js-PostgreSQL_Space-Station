@@ -129,6 +129,7 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
         <button
           onClick={() => setShowEdit(true)}
           className="p-2 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition"
+          aria-label="Edit item"
         >
           <Edit2 className="w-4 h-4" />
         </button>
@@ -136,6 +137,7 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
           onClick={handleDelete}
           disabled={isDeleting}
           className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition disabled:opacity-50"
+          aria-label="Hapus item"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -147,6 +149,7 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
             <button
               onClick={() => setShowEdit(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              aria-label="Tutup form"
             >
               <X className="w-5 h-5" />
             </button>
@@ -187,6 +190,7 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
                   accept="image/*"
                   className="hidden"
                   onChange={handleImageUpload}
+                  aria-label="Upload gambar item"
                 />
               </div>
 
@@ -199,8 +203,9 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
               />
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">Deskripsi</label>
+                <label htmlFor="edit-item-description" className="block text-sm font-medium text-slate-300">Deskripsi</label>
                 <textarea
+                  id="edit-item-description"
                   className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white placeholder:text-slate-500 focus:border-purple-500 focus:outline-none min-h-[80px]"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -218,8 +223,9 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
                   required
                 />
                 <div className="space-y-1.5">
-                  <label className="block text-sm font-medium text-slate-300">Kategori</label>
+                  <label htmlFor="edit-category" className="block text-sm font-medium text-slate-300">Kategori</label>
                   <select
+                    id="edit-category"
                     className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white focus:border-purple-500"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}

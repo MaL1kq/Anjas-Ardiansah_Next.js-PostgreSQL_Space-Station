@@ -193,6 +193,7 @@ export function CartPanel() {
                               }}
                               disabled={updatingId === cartItem.id}
                               className="p-1 text-slate-400 hover:text-white transition disabled:opacity-50"
+                              aria-label="Kurangi jumlah"
                             >
                               <Minus className="w-3 h-3" />
                             </button>
@@ -203,6 +204,7 @@ export function CartPanel() {
                               onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
                               disabled={updatingId === cartItem.id || cartItem.quantity >= cartItem.item.stock}
                               className="p-1 text-slate-400 hover:text-white transition disabled:opacity-50"
+                              aria-label="Tambah jumlah"
                             >
                               <Plus className="w-3 h-3" />
                             </button>
@@ -212,6 +214,7 @@ export function CartPanel() {
                             onClick={() => removeItem(cartItem.id)}
                             disabled={updatingId === cartItem.id}
                             className="p-1 text-red-400 hover:text-red-300 transition disabled:opacity-50"
+                            aria-label="Hapus item"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>

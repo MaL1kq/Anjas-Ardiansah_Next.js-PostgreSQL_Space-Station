@@ -133,6 +133,7 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
         <button
           onClick={() => setShowEdit(true)}
           className="p-2 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition"
+          aria-label="Edit misi"
         >
           <Edit2 className="w-4 h-4" />
         </button>
@@ -140,6 +141,7 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
           onClick={handleDelete}
           disabled={isDeleting}
           className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition disabled:opacity-50"
+          aria-label="Hapus misi"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -152,6 +154,7 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
             <button
               onClick={() => setShowEdit(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              aria-label="Tutup form"
             >
               <X className="w-5 h-5" />
             </button>
@@ -192,6 +195,7 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
                   accept="image/*"
                   className="hidden"
                   onChange={handleImageUpload}
+                  aria-label="Upload gambar misi"
                 />
               </div>
 
@@ -204,10 +208,11 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
               />
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">
+                <label htmlFor="edit-description" className="block text-sm font-medium text-slate-300">
                   Deskripsi
                 </label>
                 <textarea
+                  id="edit-description"
                   className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white placeholder:text-slate-500 focus:border-purple-500 focus:outline-none min-h-[80px]"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -234,10 +239,11 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-1.5">
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label htmlFor="edit-difficulty" className="block text-sm font-medium text-slate-300">
                     Kesulitan
                   </label>
                   <select
+                    id="edit-difficulty"
                     className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white focus:border-purple-500"
                     value={formData.difficulty}
                     onChange={(e) => setFormData({ ...formData, difficulty: e.target.value as Mission["difficulty"] })}

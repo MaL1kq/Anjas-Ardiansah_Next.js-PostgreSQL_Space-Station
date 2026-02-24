@@ -110,6 +110,7 @@ export default async function MissionsPage() {
       difficulty: mission.difficulty,
       xp: mission.xpReward,
       minLevel: mission.minLevel,
+      image: mission.image,
       status,
       xpEarned: userMission?.xpEarned || 0,
       completedBy: mission.completedBy,
@@ -148,6 +149,9 @@ export default async function MissionsPage() {
             </Link>
             <Link href="/dashboard/messages" className="text-slate-400 hover:text-white transition">
               Pesan
+            </Link>
+            <Link href="/dashboard/shop" className="text-slate-400 hover:text-white transition">
+              Toko
             </Link>
             {session.user.role === "ADMIN" && (
               <Link href="/admin" className="text-purple-400 hover:text-purple-300 transition">
@@ -245,10 +249,22 @@ export default async function MissionsPage() {
               return (
                 <Card
                   key={mission.id}
-                  className={`p-5 hover:border-purple-500/50 transition-all duration-300 ${
+                  className={`overflow-hidden hover:border-purple-500/50 transition-all duration-300 ${
                     mission.status === "locked" ? "opacity-60" : ""
                   }`}
                 >
+                  {/* Mission Image */}
+                  {mission.image && (
+                    <div className="h-36 overflow-hidden">
+                      <img
+                        src={mission.image}
+                        alt={mission.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+
+                  <div className="p-5">
                   {/* Header */}
                   <div className="flex items-start justify-between mb-3">
                     <div className={`px-2 py-1 rounded-full text-xs ${status.bg} ${status.border} border ${status.color} flex items-center gap-1`}>
@@ -309,10 +325,12 @@ export default async function MissionsPage() {
                           difficulty: mission.difficulty as "EASY" | "MEDIUM" | "HARD" | "EXTREME",
                           xpReward: mission.xp,
                           minLevel: mission.minLevel,
+                          image: mission.image,
                         }}
                       />
                     </div>
                   )}
+                  </div>
                 </Card>
               );
             })}

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
-// GET - Ambil semua misi
 export async function GET() {
   try {
     const session = await auth();
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { title, description, planet, duration, difficulty, xpReward, minLevel } = body;
+    const { title, description, planet, duration, difficulty, xpReward, minLevel, image } = body;
 
     if (!title || !description || !planet || !duration) {
       return NextResponse.json({ error: "Field wajib harus diisi" }, { status: 400 });
@@ -76,6 +75,7 @@ export async function POST(request: Request) {
         description,
         planet,
         duration,
+        image: image || null,
         difficulty: difficulty || "MEDIUM",
         xpReward: xpReward || 100,
         minLevel: minLevel || 1,

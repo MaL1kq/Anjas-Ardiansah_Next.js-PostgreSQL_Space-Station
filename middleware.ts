@@ -10,11 +10,10 @@ export async function middleware(req: NextRequest) {
   const isLoggedIn = !!token;
   const userRole = token?.role as string | undefined;
 
-  // Auth routes - halaman login/register
   const isAuthRoute = nextUrl.pathname.startsWith("/login") || 
                       nextUrl.pathname.startsWith("/register");
 
-  // Protected routes - perlu login
+
   const isProtectedRoute = nextUrl.pathname.startsWith("/dashboard") || 
                            nextUrl.pathname.startsWith("/admin");
 

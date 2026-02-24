@@ -139,6 +139,9 @@ export default async function MessagesPage() {
             <Link href="/dashboard/messages" className="text-white font-medium">
               Pesan
             </Link>
+            <Link href="/dashboard/shop" className="text-slate-400 hover:text-white transition">
+              Toko
+            </Link>
             {session.user.role === "ADMIN" && (
               <Link href="/admin" className="text-purple-400 hover:text-purple-300 transition">
                 Admin Panel

@@ -4,27 +4,25 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
-import { Trash2, Edit2, X, ImageIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { Trash2, Edit2, X, Upload, ImageIcon } from "lucide-react";
 
-interface Mission {
+interface ShopItem {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  planet: string;
-  duration: string;
-  difficulty: "EASY" | "MEDIUM" | "HARD" | "EXTREME";
-  xpReward: number;
-  minLevel: number;
-  image?: string | null;
+  image: string | null;
+  price: number;
+  category: string;
+  stock: number;
 }
 
-interface MissionAdminActionsProps {
-  mission: Mission;
+interface ShopAdminActionsProps {
+  item: ShopItem;
 }
 
-export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
+export function ShopAdminActions({ item }: ShopAdminActionsProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showEdit, setShowEdit] = useState(false);
@@ -32,16 +30,14 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(mission.image || null);
-  const [imageUrl, setImageUrl] = useState<string>(mission.image || "");
+  const [imagePreview, setImagePreview] = useState<string | null>(item.image);
+  const [imageUrl, setImageUrl] = useState<string>(item.image || "");
   const [formData, setFormData] = useState({
-    title: mission.title,
-    description: mission.description,
-    planet: mission.planet,
-    duration: mission.duration,
-    difficulty: mission.difficulty,
-    xpReward: mission.xpReward,
-    minLevel: mission.minLevel,
+    name: item.name,
+    description: item.description,
+    price: item.price,
+    category: item.category,
+    stock: item.stock,
   });
 
   useEffect(() => {
@@ -78,19 +74,19 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
   };
 
   const handleDelete = async () => {
-    if (!confirm(`Hapus misi "${mission.title}"?`)) return;
+    if (!confirm(`Hapus item "${item.name}"?`)) return;
 
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/missions/${mission.id}`, {
+      const res = await fetch(`/api/shop/${item.id}`, {
         method: "DELETE",
       });
 
       if (res.ok) {
-        alert("Misi berhasil dihapus!");
+        alert("Item berhasil dihapus!");
         router.refresh();
       } else {
-        alert("Gagal menghapus misi");
+        alert("Gagal menghapus item");
       }
     } catch {
       alert("Terjadi kesalahan");
@@ -104,7 +100,7 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
     setIsUpdating(true);
 
     try {
-      const res = await fetch(`/api/missions/${mission.id}`, {
+      const res = await fetch(`/api/shop/${item.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -114,11 +110,11 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
       });
 
       if (res.ok) {
-        alert("Misi berhasil diupdate!");
+        alert("Item berhasil diupdate!");
         setShowEdit(false);
         router.refresh();
       } else {
-        alert("Gagal mengupdate misi");
+        alert("Gagal mengupdate item");
       }
     } catch {
       alert("Terjadi kesalahan");
@@ -145,7 +141,6 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
         </button>
       </div>
 
-      {/* Edit Modal - menggunakan Portal agar muncul di atas semua elemen */}
       {mounted && showEdit && createPortal(
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
           <Card className="w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
@@ -156,12 +151,12 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-xl font-bold text-white mb-6">Edit Misi</h2>
+            <h2 className="text-xl font-bold text-white mb-6">Edit Item</h2>
 
             <form onSubmit={handleUpdate} className="space-y-4">
               {/* Image Upload */}
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">Gambar Misi</label>
+                <label className="block text-sm font-medium text-slate-300">Gambar Item</label>
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   className="border-2 border-dashed border-slate-700 rounded-lg p-4 text-center cursor-pointer hover:border-purple-500/50 transition-colors"
@@ -196,17 +191,15 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
               </div>
 
               <Input
-                id="title"
-                label="Judul Misi"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                id="name"
+                label="Nama Item"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
               />
 
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-300">
-                  Deskripsi
-                </label>
+                <label className="block text-sm font-medium text-slate-300">Deskripsi</label>
                 <textarea
                   className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white placeholder:text-slate-500 focus:border-purple-500 focus:outline-none min-h-[80px]"
                   value={formData.description}
@@ -215,53 +208,37 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  id="planet"
-                  label="Planet"
-                  value={formData.planet}
-                  onChange={(e) => setFormData({ ...formData, planet: e.target.value })}
-                  required
-                />
-                <Input
-                  id="duration"
-                  label="Durasi"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  required
-                />
-              </div>
-
               <div className="grid grid-cols-3 gap-4">
+                <Input
+                  id="price"
+                  label="Harga"
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: parseInt(e.target.value) || 0 })}
+                  required
+                />
                 <div className="space-y-1.5">
-                  <label className="block text-sm font-medium text-slate-300">
-                    Kesulitan
-                  </label>
+                  <label className="block text-sm font-medium text-slate-300">Kategori</label>
                   <select
                     className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white focus:border-purple-500"
-                    value={formData.difficulty}
-                    onChange={(e) => setFormData({ ...formData, difficulty: e.target.value as Mission["difficulty"] })}
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   >
-                    <option value="EASY">Easy</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="HARD">Hard</option>
-                    <option value="EXTREME">Extreme</option>
+                    <option value="WEAPON">Senjata</option>
+                    <option value="ARMOR">Armor</option>
+                    <option value="TOOL">Alat</option>
+                    <option value="FOOD">Makanan</option>
+                    <option value="VEHICLE">Kendaraan</option>
+                    <option value="MATERIAL">Material</option>
                   </select>
                 </div>
                 <Input
-                  id="xpReward"
-                  label="XP Reward"
+                  id="stock"
+                  label="Stok"
                   type="number"
-                  value={formData.xpReward}
-                  onChange={(e) => setFormData({ ...formData, xpReward: parseInt(e.target.value) || 0 })}
+                  value={formData.stock}
+                  onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
                   required
-                />
-                <Input
-                  id="minLevel"
-                  label="Min Level"
-                  type="number"
-                  value={formData.minLevel}
-                  onChange={(e) => setFormData({ ...formData, minLevel: parseInt(e.target.value) || 1 })}
                 />
               </div>
 

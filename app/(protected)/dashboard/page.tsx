@@ -51,6 +51,9 @@ export default async function DashboardPage() {
             <Link href="/dashboard/messages" className="text-slate-400 hover:text-white transition">
               Pesan
             </Link>
+            <Link href="/dashboard/shop" className="text-slate-400 hover:text-white transition">
+              Toko
+            </Link>
             {session.user.role === "ADMIN" && (
               <Link href="/admin" className="text-purple-400 hover:text-purple-300 transition">
                 Admin Panel
@@ -102,13 +105,23 @@ export default async function DashboardPage() {
 
         {/* Quick Actions */}
         <h2 className="text-xl font-bold text-white mb-4">Aksi Cepat</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link href="/dashboard/missions">
             <Card className="p-6 hover:border-purple-500/50 transition-colors cursor-pointer group h-full">
               <Rocket className="w-10 h-10 text-purple-400 mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="text-lg font-semibold text-white mb-2">Mulai Misi Baru</h3>
               <p className="text-slate-400 text-sm">
                 Jelajahi galaksi dan selesaikan misi untuk mendapatkan XP
+              </p>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/shop">
+            <Card className="p-6 hover:border-emerald-500/50 transition-colors cursor-pointer group h-full">
+              <Star className="w-10 h-10 text-emerald-400 mb-4 group-hover:scale-110 transition-transform" />
+              <h3 className="text-lg font-semibold text-white mb-2">Toko Angkasa</h3>
+              <p className="text-slate-400 text-sm">
+                Beli perlengkapan untuk misi luar angkasa
               </p>
             </Card>
           </Link>

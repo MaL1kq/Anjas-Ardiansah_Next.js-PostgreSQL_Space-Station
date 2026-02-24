@@ -31,6 +31,7 @@ model User {
   userMissions     UserMission[]
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  cartItems        CartItem[]
 }
 
 model Account {
@@ -77,6 +78,7 @@ model Mission {
   description String
   planet      String
   duration    String
+  image       String?                      // URL gambar misi (base64 atau path)
   difficulty  Difficulty @default(MEDIUM)
   xpReward    Int        @default(100)
   minLevel    Int        @default(1)
@@ -145,4 +147,43 @@ enum MissionStatus {
   IN_PROGRESS
   COMPLETED
   FAILED
+}
+
+enum ItemCategory {
+  WEAPON
+  ARMOR
+  TOOL
+  FOOD
+  VEHICLE
+  MATERIAL
+}
+
+// ==================== SHOP MODELS ====================
+
+model ShopItem {
+  id          String       @id @default(cuid())
+  name        String
+  description String
+  image       String?                       // Gambar item (base64 atau path)
+  price       Int          @default(0)      // Harga dalam credits
+  category    ItemCategory @default(TOOL)
+  stock       Int          @default(99)
+  isAvailable Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  cartItems CartItem[]
+}
+
+model CartItem {
+  id         String   @id @default(cuid())
+  userId     String
+  itemId     String
+  quantity   Int      @default(1)
+  createdAt  DateTime @default(now())
+
+  user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item ShopItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
 }

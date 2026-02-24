@@ -100,6 +100,9 @@ export default async function CrewPage() {
             <Link href="/dashboard/messages" className="text-slate-400 hover:text-white transition">
               Pesan
             </Link>
+            <Link href="/dashboard/shop" className="text-slate-400 hover:text-white transition">
+              Toko
+            </Link>
             {session.user.role === "ADMIN" && (
               <Link href="/admin" className="text-purple-400 hover:text-purple-300 transition">
                 Admin Panel

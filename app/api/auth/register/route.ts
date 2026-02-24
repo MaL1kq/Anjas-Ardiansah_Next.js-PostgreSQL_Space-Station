@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, email, password } = body;
 
-    // Validasi input
+
     if (!name || !email || !password) {
       return NextResponse.json(
         { error: "Semua field harus diisi" },

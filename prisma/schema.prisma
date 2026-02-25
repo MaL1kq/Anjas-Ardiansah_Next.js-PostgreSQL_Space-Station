@@ -22,6 +22,7 @@ model User {
   password      String?
   role          Role      @default(USER)
   xp            Int       @default(0)
+  credits       Int       @default(0)
   level         Int       @default(1)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -81,6 +82,7 @@ model Mission {
   image       String?                      // URL gambar misi (base64 atau path)
   difficulty  Difficulty @default(MEDIUM)
   xpReward    Int        @default(100)
+  creditReward Int       @default(100)
   minLevel    Int        @default(1)
   isActive    Boolean    @default(true)
   isCompleted Boolean    @default(false)  // Misi selesai secara global untuk semua user

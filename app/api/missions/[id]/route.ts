@@ -40,7 +40,7 @@ export async function PUT(
 
     const { id } = await params;
     const body = await request.json();
-    const { title, description, planet, duration, difficulty, xpReward, minLevel, image } = body;
+    const { title, description, planet, duration, difficulty, xpReward, creditReward, minLevel, image } = body;
 
     const mission = await prisma.mission.update({
       where: { id },
@@ -52,6 +52,7 @@ export async function PUT(
         image: image !== undefined ? (image || null) : undefined,
         difficulty,
         xpReward: parseInt(xpReward),
+        creditReward: parseInt(creditReward),
         minLevel: parseInt(minLevel),
       },
     });

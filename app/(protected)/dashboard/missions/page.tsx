@@ -18,6 +18,7 @@ import {
   Target,
   Zap,
   Globe,
+  Coins,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -109,6 +110,7 @@ export default async function MissionsPage() {
       duration: mission.duration,
       difficulty: mission.difficulty,
       xp: mission.xpReward,
+      credits: mission.creditReward,
       minLevel: mission.minLevel,
       image: mission.image,
       status,
@@ -292,11 +294,17 @@ export default async function MissionsPage() {
                     </div>
                   </div>
 
-                  {/* XP & Action */}
+                  {/* Rewards & Action */}
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Zap className="w-4 h-4 text-yellow-400" />
-                      <span className="text-yellow-400 font-medium">{mission.xp} XP</span>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1">
+                        <Zap className="w-4 h-4 text-yellow-400" />
+                        <span className="text-yellow-400 font-medium">{mission.xp} XP</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Coins className="w-4 h-4 text-emerald-400" />
+                        <span className="text-emerald-400 font-medium">{mission.credits} Cr</span>
+                      </div>
                     </div>
 
                     {mission.status === "completed" ? (
@@ -324,6 +332,7 @@ export default async function MissionsPage() {
                           duration: mission.duration,
                           difficulty: mission.difficulty as "EASY" | "MEDIUM" | "HARD" | "EXTREME",
                           xpReward: mission.xp,
+                          creditReward: mission.credits,
                           minLevel: mission.minLevel,
                           image: mission.image,
                         }}

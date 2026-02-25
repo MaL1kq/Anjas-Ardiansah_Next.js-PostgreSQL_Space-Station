@@ -87,7 +87,6 @@ export default async function ShopPage() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <CartPanel />
             <div className="text-right hidden sm:block">
               <p className="text-sm font-medium text-white">{session.user.name}</p>
               <p className="text-xs text-slate-400">{session.user.email}</p>
@@ -110,7 +109,10 @@ export default async function ShopPage() {
               Beli perlengkapan untuk misi-misi luar angkasa
             </p>
           </div>
-          {session.user.role === "ADMIN" && <AddShopItemButton />}
+          <div className="flex items-center gap-3">
+            <CartPanel />
+            {session.user.role === "ADMIN" && <AddShopItemButton />}
+          </div>
         </div>
 
         {/* Stats */}

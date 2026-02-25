@@ -24,6 +24,7 @@ interface CartData {
   items: CartItemData[];
   total: number;
   totalItems: number;
+  credits: number;
 }
 
 export function CartPanel() {
@@ -31,6 +32,7 @@ export function CartPanel() {
   const [isOpen, setIsOpen] = useState(false);
   const [cart, setCart] = useState<CartData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const fetchCart = async () => {
@@ -111,6 +113,29 @@ export function CartPanel() {
     }
   };
 
+  const handleCheckout = async () => {
+    setIsCheckingOut(true);
+    try {
+      const res = await fetch("/api/cart/checkout", {
+        method: "POST",
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(`Checkout berhasil! -${data.totalSpent.toLocaleString()} Credits`);
+        await fetchCart();
+        router.refresh();
+      } else {
+        alert(data.error || "Checkout gagal");
+      }
+    } catch {
+      alert("Terjadi kesalahan");
+    } finally {
+      setIsCheckingOut(false);
+    }
+  };
+
   const itemCount = cart?.totalItems || 0;
 
   return (
@@ -140,6 +165,12 @@ export function CartPanel() {
                 <ShoppingCart className="w-5 h-5 text-purple-400" />
                 <h2 className="text-lg font-bold text-white">Cart ({itemCount})</h2>
               </div>
+              {cart && (
+                <div className="text-right mr-2">
+                  <p className="text-[11px] text-slate-500">Saldo</p>
+                  <p className="text-sm font-semibold text-emerald-400">{cart.credits.toLocaleString()} Cr</p>
+                </div>
+              )}
               <button
                 onClick={() => setIsOpen(false)}
                 title="Tutup Cart"
@@ -235,6 +266,12 @@ export function CartPanel() {
                     {cart.total.toLocaleString()} Credits
                   </span>
                 </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">Sisa setelah checkout</span>
+                  <span className={`${cart.credits - cart.total >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                    {(cart.credits - cart.total).toLocaleString()} Cr
+                  </span>
+                </div>
                 <div className="flex gap-2">
                   <Button
                     variant="danger"
@@ -245,7 +282,13 @@ export function CartPanel() {
                   >
                     Kosongkan
                   </Button>
-                  <Button size="sm" className="flex-1">
+                  <Button
+                    size="sm"
+                    className="flex-1"
+                    onClick={handleCheckout}
+                    isLoading={isCheckingOut}
+                    disabled={isLoading || isCheckingOut || cart.total > cart.credits}
+                  >
                     Checkout
                   </Button>
                 </div>

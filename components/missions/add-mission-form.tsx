@@ -26,6 +26,7 @@ export function AddMissionForm({ onClose }: AddMissionFormProps) {
     duration: "",
     difficulty: "MEDIUM",
     xpReward: 100,
+    creditReward: 100,
     minLevel: 1,
   });
 
@@ -199,7 +200,7 @@ export function AddMissionForm({ onClose }: AddMissionFormProps) {
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label htmlFor="difficulty" className="block text-sm font-medium text-slate-300">
                 Kesulitan
@@ -224,6 +225,16 @@ export function AddMissionForm({ onClose }: AddMissionFormProps) {
               placeholder="100"
               value={formData.xpReward}
               onChange={(e) => setFormData({ ...formData, xpReward: parseInt(e.target.value) || 0 })}
+              required
+            />
+
+            <Input
+              id="creditReward"
+              label="Credit Reward"
+              type="number"
+              placeholder="100"
+              value={formData.creditReward}
+              onChange={(e) => setFormData({ ...formData, creditReward: parseInt(e.target.value) || 0 })}
               required
             />
 

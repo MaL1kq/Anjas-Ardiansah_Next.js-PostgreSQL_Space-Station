@@ -16,6 +16,7 @@ interface Mission {
   duration: string;
   difficulty: "EASY" | "MEDIUM" | "HARD" | "EXTREME";
   xpReward: number;
+  creditReward: number;
   minLevel: number;
   image?: string | null;
 }
@@ -41,6 +42,7 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
     duration: mission.duration,
     difficulty: mission.difficulty,
     xpReward: mission.xpReward,
+    creditReward: mission.creditReward,
     minLevel: mission.minLevel,
   });
 
@@ -237,7 +239,7 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label htmlFor="edit-difficulty" className="block text-sm font-medium text-slate-300">
                     Kesulitan
@@ -260,6 +262,14 @@ export function MissionAdminActions({ mission }: MissionAdminActionsProps) {
                   type="number"
                   value={formData.xpReward}
                   onChange={(e) => setFormData({ ...formData, xpReward: parseInt(e.target.value) || 0 })}
+                  required
+                />
+                <Input
+                  id="creditReward"
+                  label="Credit Reward"
+                  type="number"
+                  value={formData.creditReward}
+                  onChange={(e) => setFormData({ ...formData, creditReward: parseInt(e.target.value) || 0 })}
                   required
                 />
                 <Input

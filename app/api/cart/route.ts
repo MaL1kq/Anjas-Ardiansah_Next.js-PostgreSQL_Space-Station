@@ -20,11 +20,16 @@ export async function GET() {
 
     const total = cartItems.reduce((acc, ci) => acc + ci.item.price * ci.quantity, 0);
     const totalItems = cartItems.reduce((acc, ci) => acc + ci.quantity, 0);
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { credits: true },
+    });
 
     return NextResponse.json({
       items: cartItems,
       total,
       totalItems,
+      credits: user?.credits ?? 0,
     });
   } catch (error) {
     console.error("Error fetching cart:", error);

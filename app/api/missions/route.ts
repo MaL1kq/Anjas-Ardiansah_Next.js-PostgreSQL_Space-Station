@@ -36,7 +36,9 @@ export async function GET() {
         duration: mission.duration,
         difficulty: mission.difficulty,
         xp: mission.xpReward,
+        credits: mission.creditReward,
         minLevel: mission.minLevel,
+        image: mission.image,
         status,
         userMissionId: userMission?.id,
         xpEarned: userMission?.xpEarned || 0,
@@ -63,7 +65,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { title, description, planet, duration, difficulty, xpReward, minLevel, image } = body;
+    const { title, description, planet, duration, difficulty, xpReward, creditReward, minLevel, image } = body;
 
     if (!title || !description || !planet || !duration) {
       return NextResponse.json({ error: "Field wajib harus diisi" }, { status: 400 });
@@ -78,6 +80,7 @@ export async function POST(request: Request) {
         image: image || null,
         difficulty: difficulty || "MEDIUM",
         xpReward: xpReward || 100,
+        creditReward: creditReward || 100,
         minLevel: minLevel || 1,
       },
     });

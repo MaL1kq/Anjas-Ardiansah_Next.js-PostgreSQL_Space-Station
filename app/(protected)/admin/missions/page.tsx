@@ -10,6 +10,7 @@ import {
   MapPin, 
   Clock, 
   Zap,
+  Coins,
   Users,
   Target
 } from "lucide-react";
@@ -160,6 +161,10 @@ export default async function AdminMissionsPage() {
                       <div className="flex items-center gap-1.5 text-purple-400">
                         <Zap className="w-4 h-4" />
                         <span>+{mission.xpReward} XP</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-emerald-400">
+                        <Coins className="w-4 h-4" />
+                        <span>+{mission.creditReward} Credits</span>
                       </div>
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <Users className="w-4 h-4" />

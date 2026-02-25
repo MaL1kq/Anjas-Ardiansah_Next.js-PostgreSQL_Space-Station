@@ -50,6 +50,7 @@ export async function POST(
     }
 
     const xpReward = mission.xpReward;
+    const creditReward = mission.creditReward;
 
     // Update user mission menjadi completed
     await prisma.userMission.update({
@@ -71,10 +72,11 @@ export async function POST(
       },
     });
 
-    // TAMBAHKAN XP KE SEMUA KRU (semua user)
+    // TAMBAHKAN XP DAN CREDITS KE SEMUA KRU (semua user)
     await prisma.user.updateMany({
       data: {
         xp: { increment: xpReward },
+        credits: { increment: creditReward },
       },
     });
 
@@ -92,8 +94,9 @@ export async function POST(
     );
 
     return NextResponse.json({
-      message: `Misi "${mission.title}" selesai! Semua kru mendapatkan +${xpReward} XP! 🎉`,
+      message: `Misi "${mission.title}" selesai! Semua kru mendapatkan +${xpReward} XP dan +${creditReward} Credits! 🎉`,
       xpEarned: xpReward,
+      creditsEarned: creditReward,
       completedBy: session.user.name,
       allCrewRewarded: true,
     });

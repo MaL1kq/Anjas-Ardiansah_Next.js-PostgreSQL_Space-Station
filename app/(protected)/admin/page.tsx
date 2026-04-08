@@ -11,6 +11,7 @@ import {
   UserPlus,
   Settings,
   ShoppingCart,
+  Receipt,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -67,6 +68,9 @@ export default async function AdminPage() {
             </Link>
             <Link href="/admin/shop" className="text-slate-400 hover:text-white transition">
               Toko
+            </Link>
+            <Link href="/admin/transactions" className="text-slate-400 hover:text-white transition">
+              Transaksi
             </Link>
             <Link href="/admin/users" className="text-slate-400 hover:text-white transition">
               Users
@@ -174,6 +178,13 @@ export default async function AdminPage() {
                 <div>
                   <p className="text-white font-medium">Kelola Toko</p>
                   <p className="text-slate-400 text-sm">Atur item toko dan pantau cart</p>
+                </div>
+              </Link>
+              <Link href="/admin/transactions" className="w-full flex items-center gap-3 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition text-left">
+                <Receipt className="w-5 h-5 text-cyan-400" />
+                <div>
+                  <p className="text-white font-medium">Kendali Transaksi</p>
+                  <p className="text-slate-400 text-sm">Setujui atau gagalkan pembelian user</p>
                 </div>
               </Link>
               <Link href="/dashboard/crew" className="w-full flex items-center gap-3 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition text-left">

@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-// PUT - Update quantity cart item
+// PUT - Update cart item (quantity/selection/note)
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -15,11 +15,7 @@ export async function PUT(
 
     const { id } = await params;
     const body = await request.json();
-    const { quantity } = body;
-
-    if (quantity < 1) {
-      return NextResponse.json({ error: "Quantity minimal 1" }, { status: 400 });
-    }
+    const { quantity, isSelected, requestNote } = body;
 
     // Cek ownership
     const cartItem = await prisma.cartItem.findUnique({
@@ -31,14 +27,39 @@ export async function PUT(
       return NextResponse.json({ error: "Item tidak ditemukan" }, { status: 404 });
     }
 
-    // Cek stok
-    if (cartItem.item.stock < quantity) {
-      return NextResponse.json({ error: "Stok tidak cukup" }, { status: 400 });
+    if (quantity !== undefined) {
+      if (typeof quantity !== "number" || quantity < 1) {
+        return NextResponse.json({ error: "Quantity minimal 1" }, { status: 400 });
+      }
+
+      // Cek stok
+      if (cartItem.item.stock < quantity) {
+        return NextResponse.json({ error: "Stok tidak cukup" }, { status: 400 });
+      }
+    }
+
+    const nextData: {
+      quantity?: number;
+      isSelected?: boolean;
+      requestNote?: string | null;
+    } = {};
+
+    if (quantity !== undefined) {
+      nextData.quantity = quantity;
+    }
+    if (typeof isSelected === "boolean") {
+      nextData.isSelected = isSelected;
+    }
+    if (requestNote !== undefined) {
+      if (typeof requestNote !== "string" && requestNote !== null) {
+        return NextResponse.json({ error: "Catatan tidak valid" }, { status: 400 });
+      }
+      nextData.requestNote = requestNote && requestNote.trim().length > 0 ? requestNote.trim() : null;
     }
 
     const updated = await prisma.cartItem.update({
       where: { id },
-      data: { quantity },
+      data: nextData,
       include: { item: true },
     });
 

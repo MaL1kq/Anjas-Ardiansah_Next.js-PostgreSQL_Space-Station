@@ -89,6 +89,11 @@ export default async function MissionsPage() {
     },
   });
 
+  const userProfile = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { credits: true },
+  });
+
   // Transform untuk UI - gunakan status global isCompleted
   const transformedMissions = missions.map((mission) => {
     const userMission = mission.userMissions[0];
@@ -124,6 +129,9 @@ export default async function MissionsPage() {
   const totalXP = transformedMissions
     .filter((m) => m.status === "completed")
     .reduce((acc, m) => acc + m.xp, 0);
+  const totalCoinsEarned = transformedMissions
+    .filter((m) => m.status === "completed")
+    .reduce((acc, m) => acc + m.credits, 0);
 
   return (
     <div className="min-h-screen">
@@ -189,7 +197,7 @@ export default async function MissionsPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <Card className="p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
               <CheckCircle className="w-6 h-6 text-green-400" />
@@ -211,12 +219,32 @@ export default async function MissionsPage() {
           </Card>
 
           <Card className="p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+              <Coins className="w-6 h-6 text-emerald-400" />
+            </div>
+            <div>
+              <p className="text-slate-400 text-sm">Perolehan Coin</p>
+              <p className="text-2xl font-bold text-white">{totalCoinsEarned.toLocaleString()}</p>
+            </div>
+          </Card>
+
+          <Card className="p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
               <Star className="w-6 h-6 text-purple-400" />
             </div>
             <div>
               <p className="text-slate-400 text-sm">Rank</p>
               <p className="text-2xl font-bold text-white">Space Ranger</p>
+            </div>
+          </Card>
+
+          <Card className="p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+              <Coins className="w-6 h-6 text-cyan-400" />
+            </div>
+            <div>
+              <p className="text-slate-400 text-sm">Saldo Coin</p>
+              <p className="text-2xl font-bold text-white">{(userProfile?.credits ?? 0).toLocaleString()}</p>
             </div>
           </Card>
         </div>

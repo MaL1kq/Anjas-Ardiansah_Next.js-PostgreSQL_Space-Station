@@ -19,6 +19,7 @@ import {
   Boxes,
   Sword,
   Zap,
+  Receipt,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -79,6 +80,9 @@ export default async function ShopPage() {
             <Link href="/dashboard/shop" className="text-white font-medium">
               Toko
             </Link>
+            <Link href="/dashboard/transactions" className="text-slate-400 hover:text-white transition">
+              Transaksi
+            </Link>
             {session.user.role === "ADMIN" && (
               <Link href="/admin" className="text-purple-400 hover:text-purple-300 transition">
                 Admin Panel
@@ -110,6 +114,13 @@ export default async function ShopPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/transactions"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700 bg-slate-800/60 text-slate-200 hover:text-white hover:border-cyan-500/50 transition"
+            >
+              <Receipt className="w-4 h-4 text-cyan-400" />
+              Riwayat
+            </Link>
             <CartPanel />
             {session.user.role === "ADMIN" && <AddShopItemButton />}
           </div>

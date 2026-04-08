@@ -37,8 +37,8 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
     description: item.description,
     price: item.price,
     category: item.category,
-    stock: item.stock,
   });
+  const [stockInput, setStockInput] = useState(String(item.stock));
 
   useEffect(() => {
     setMounted(true);
@@ -97,6 +97,13 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const parsedStock = Number(stockInput);
+    if (stockInput.trim() === "" || !Number.isInteger(parsedStock) || parsedStock < 0) {
+      alert("Stok harus angka bulat 0 atau lebih");
+      return;
+    }
+
     setIsUpdating(true);
 
     try {
@@ -105,6 +112,7 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          stock: parsedStock,
           image: imageUrl || null,
         }),
       });
@@ -242,8 +250,15 @@ export function ShopAdminActions({ item }: ShopAdminActionsProps) {
                   id="stock"
                   label="Stok"
                   type="number"
-                  value={formData.stock}
-                  onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+                  min={0}
+                  step={1}
+                  value={stockInput}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    if (next === "" || /^\d+$/.test(next)) {
+                      setStockInput(next);
+                    }
+                  }}
                   required
                 />
               </div>

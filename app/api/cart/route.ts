@@ -20,6 +20,9 @@ export async function GET() {
 
     const total = cartItems.reduce((acc, ci) => acc + ci.item.price * ci.quantity, 0);
     const totalItems = cartItems.reduce((acc, ci) => acc + ci.quantity, 0);
+    const selectedItems = cartItems.filter((ci) => ci.isSelected);
+    const selectedTotal = selectedItems.reduce((acc, ci) => acc + ci.item.price * ci.quantity, 0);
+    const selectedCount = selectedItems.reduce((acc, ci) => acc + ci.quantity, 0);
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { credits: true },
@@ -29,6 +32,8 @@ export async function GET() {
       items: cartItems,
       total,
       totalItems,
+      selectedTotal,
+      selectedCount,
       credits: user?.credits ?? 0,
     });
   } catch (error) {
@@ -76,11 +81,13 @@ export async function POST(request: Request) {
       },
       update: {
         quantity: { increment: quantity },
+        isSelected: true,
       },
       create: {
         userId: session.user.id,
         itemId,
         quantity,
+        isSelected: true,
       },
       include: { item: true },
     });

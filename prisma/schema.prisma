@@ -33,6 +33,8 @@ model User {
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
   cartItems        CartItem[]
+  transactions     Transaction[] @relation("UserTransactions")
+  processedTransactions Transaction[] @relation("ProcessedTransactions")
 }
 
 model Account {
@@ -151,6 +153,12 @@ enum MissionStatus {
   FAILED
 }
 
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
 enum ItemCategory {
   WEAPON
   ARMOR
@@ -175,6 +183,7 @@ model ShopItem {
   updatedAt   DateTime     @updatedAt
 
   cartItems CartItem[]
+  transactionItems TransactionItem[]
 }
 
 model CartItem {
@@ -182,10 +191,47 @@ model CartItem {
   userId     String
   itemId     String
   quantity   Int      @default(1)
+  isSelected Boolean  @default(true)
+  requestNote String? @db.Text
   createdAt  DateTime @default(now())
 
   user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   item ShopItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   @@unique([userId, itemId])
+}
+
+model Transaction {
+  id          String            @id @default(cuid())
+  code        String            @unique
+  userId      String
+  totalAmount Int
+  itemCount   Int
+  status      TransactionStatus @default(PENDING)
+  customerNote String?          @db.Text
+  adminNote   String?           @db.Text
+  processedBy String?
+  processedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  user      User    @relation("UserTransactions", fields: [userId], references: [id], onDelete: Cascade)
+  processor User?   @relation("ProcessedTransactions", fields: [processedBy], references: [id], onDelete: SetNull)
+  items     TransactionItem[]
+}
+
+model TransactionItem {
+  id            String   @id @default(cuid())
+  transactionId String
+  shopItemId    String?
+  itemName      String
+  itemImage     String?
+  unitPrice     Int
+  quantity      Int
+  subtotal      Int
+  requestNote   String?  @db.Text
+  createdAt     DateTime @default(now())
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  shopItem     ShopItem?  @relation(fields: [shopItemId], references: [id], onDelete: SetNull)
 }

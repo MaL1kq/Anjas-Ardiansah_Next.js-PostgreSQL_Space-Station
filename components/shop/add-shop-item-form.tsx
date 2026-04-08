@@ -24,8 +24,8 @@ export function AddShopItemForm({ onClose }: AddShopItemFormProps) {
     description: "",
     price: 100,
     category: "TOOL",
-    stock: 99,
   });
+  const [stockInput, setStockInput] = useState("99");
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -65,12 +65,20 @@ export function AddShopItemForm({ onClose }: AddShopItemFormProps) {
     setIsLoading(true);
     setError("");
 
+    const parsedStock = Number(stockInput);
+    if (stockInput.trim() === "" || !Number.isInteger(parsedStock) || parsedStock < 0) {
+      setError("Stok harus angka bulat 0 atau lebih");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/shop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          stock: parsedStock,
           image: imageUrl || null,
         }),
       });
@@ -210,8 +218,15 @@ export function AddShopItemForm({ onClose }: AddShopItemFormProps) {
               label="Stok"
               type="number"
               placeholder="99"
-              value={formData.stock}
-              onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+              min={0}
+              step={1}
+              value={stockInput}
+              onChange={(e) => {
+                const next = e.target.value;
+                if (next === "" || /^\d+$/.test(next)) {
+                  setStockInput(next);
+                }
+              }}
               required
             />
           </div>

@@ -39,15 +39,30 @@ export async function PUT(
     const body = await request.json();
     const { name, description, image, price, category, stock } = body;
 
+    if (!name || !description) {
+      return NextResponse.json({ error: "Nama dan deskripsi wajib diisi" }, { status: 400 });
+    }
+
+    const parsedPrice = Number(price);
+    const parsedStock = Number(stock);
+
+    if (!Number.isFinite(parsedPrice) || parsedPrice < 0) {
+      return NextResponse.json({ error: "Harga harus angka 0 atau lebih" }, { status: 400 });
+    }
+
+    if (!Number.isInteger(parsedStock) || parsedStock < 0) {
+      return NextResponse.json({ error: "Stok harus angka bulat 0 atau lebih" }, { status: 400 });
+    }
+
     const item = await prisma.shopItem.update({
       where: { id },
       data: {
         name,
         description,
         image: image || null,
-        price: parseInt(price) || 0,
+        price: Math.floor(parsedPrice),
         category: category || "TOOL",
-        stock: parseInt(stock) || 99,
+        stock: parsedStock,
       },
     });
 

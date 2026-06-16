@@ -10,11 +10,15 @@ import {
 } from "@/components/ui/card";
 import { Rocket } from "lucide-react";
 import SpaceBackground from "@/components/space-background";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <SpaceBackground />
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
       
       <div className="w-full max-w-md">
         {/* Logo */}

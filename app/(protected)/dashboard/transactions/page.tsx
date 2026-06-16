@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { SignOutButton } from "@/components/auth/signout-button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import SpaceBackground from "@/components/space-background";
 import { prisma } from "@/lib/prisma";
 import { Rocket, Receipt, Clock3, CheckCircle2, XCircle, Coins } from "lucide-react";
@@ -77,6 +78,7 @@ export default async function TransactionsPage() {
           </nav>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <div className="text-right hidden sm:block">
               <p className="text-sm font-medium text-white">{session.user.name}</p>
               <p className="text-xs text-slate-400">{session.user.email}</p>

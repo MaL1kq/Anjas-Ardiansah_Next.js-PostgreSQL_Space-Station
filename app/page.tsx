@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import SpaceBackground from "@/components/space-background";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Rocket, Star, Users, Shield, ArrowRight } from "lucide-react";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
           </div>
 
           <nav className="flex items-center gap-4">
+            <ThemeToggle />
             <Link href="/login">
               <Button variant="ghost">Masuk</Button>
             </Link>

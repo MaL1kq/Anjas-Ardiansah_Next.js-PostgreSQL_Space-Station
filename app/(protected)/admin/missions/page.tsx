@@ -2,11 +2,14 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Card } from "@/components/ui/card";
+import { SignOutButton } from "@/components/auth/signout-button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
+import SpaceBackground from "@/components/space-background";
 import { AddMissionButton } from "@/components/missions/add-mission-button";
 import { MissionAdminActions } from "@/components/missions/mission-admin-actions";
 import { 
   Rocket, 
-  ArrowLeft, 
+  Shield,
   MapPin, 
   Clock, 
   Zap,
@@ -55,26 +58,61 @@ export default async function AdminMissionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 py-8">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen">
+      <SpaceBackground />
+
+      <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-bold text-white text-lg">Admin Panel</span>
+          </div>
+
+          <nav className="hidden md:flex items-center gap-6">
+            <Link href="/dashboard" className="text-slate-400 hover:text-white transition">
+              Dashboard
+            </Link>
+            <Link href="/admin" className="text-slate-400 hover:text-white transition">
+              Admin
+            </Link>
+            <Link href="/admin/missions" className="text-white font-medium">
+              Misi
+            </Link>
+            <Link href="/admin/shop" className="text-slate-400 hover:text-white transition">
+              Toko
+            </Link>
+            <Link href="/admin/transactions" className="text-slate-400 hover:text-white transition">
+              Transaksi
+            </Link>
+            <Link href="/admin/users" className="text-slate-400 hover:text-white transition">
+              Users
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-medium text-white">{session.user.name}</p>
+              <p className="text-xs text-yellow-400">Commander</p>
+            </div>
+            <SignOutButton />
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin"
-              className="p-2 rounded-lg bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-                <Rocket className="w-8 h-8 text-purple-400" />
-                Kelola Misi
-              </h1>
-              <p className="text-slate-400 mt-1">
-                Tambah, edit, dan kelola misi untuk para astronaut
-              </p>
-            </div>
+          <div>
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+              <Rocket className="w-8 h-8 text-purple-400" />
+              Kelola Misi
+            </h1>
+            <p className="text-slate-400 mt-1">
+              Tambah, edit, dan kelola misi untuk para astronaut
+            </p>
           </div>
           <AddMissionButton />
         </div>
@@ -186,7 +224,7 @@ export default async function AdminMissionsPage() {
             ))}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

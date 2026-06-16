@@ -6,6 +6,7 @@ import { ChatContainer } from "@/components/messages/chat-container";
 import { Rocket } from "lucide-react";
 import Link from "next/link";
 import { SignOutButton } from "@/components/auth/signout-button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -123,6 +124,7 @@ export default async function ChatPage({ params }: Props) {
           </nav>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <div className="text-right hidden sm:block">
               <p className="text-sm font-medium text-white">{session.user.name}</p>
               <p className="text-xs text-slate-400">{session.user.email}</p>

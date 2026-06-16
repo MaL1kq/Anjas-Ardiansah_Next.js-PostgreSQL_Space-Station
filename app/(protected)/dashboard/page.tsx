@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { Card } from "@/components/ui/card";
 import { SignOutButton } from "@/components/auth/signout-button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import SpaceBackground from "@/components/space-background";
 import {
   Rocket,
@@ -62,6 +63,7 @@ export default async function DashboardPage() {
           </nav>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <div className="text-right hidden sm:block">
               <p className="text-sm font-medium text-white">{session.user.name}</p>
               <p className="text-xs text-slate-400">{session.user.email}</p>

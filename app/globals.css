@@ -3,6 +3,19 @@
 :root {
   --background: #020617;
   --foreground: #f8fafc;
+  --surface-1: rgba(15, 23, 42, 0.72);
+  --surface-2: rgba(15, 23, 42, 0.55);
+  --border-1: #1e293b;
+  --muted: #94a3b8;
+}
+
+html.light {
+  --background: #eef4ff;
+  --foreground: #0f2445;
+  --surface-1: rgba(255, 255, 255, 0.9);
+  --surface-2: rgba(239, 247, 255, 0.92);
+  --border-1: #c6d6ee;
+  --muted: #5b7295;
 }
 
 * {
@@ -13,6 +26,57 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+html.light body {
+  background:
+    radial-gradient(ellipse 520px 260px at 18% 12%, rgba(255, 255, 255, 0.96), transparent 74%),
+    radial-gradient(ellipse 560px 280px at 88% 18%, rgba(224, 242, 254, 0.8), transparent 76%),
+    radial-gradient(ellipse 620px 280px at 50% 88%, rgba(186, 230, 253, 0.55), transparent 76%),
+    linear-gradient(180deg, #bfe3ff 0%, #d9efff 42%, #e9f6ff 100%);
+}
+
+.space-bg-gradient,
+.space-bg-nebula-a,
+.space-bg-nebula-b,
+.space-bg-nebula-c {
+  transition: background 220ms ease, opacity 220ms ease;
+}
+
+.space-bg-gradient {
+  background: linear-gradient(135deg, #020617 0%, rgba(88, 28, 135, 0.25) 45%, #020617 100%);
+}
+
+.space-bg-nebula-a {
+  background: rgba(168, 85, 247, 0.12);
+}
+
+.space-bg-nebula-b {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.space-bg-nebula-c {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+html.light .space-bg-gradient {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.94), transparent 38%),
+    radial-gradient(circle at 78% 26%, rgba(147, 197, 253, 0.4), transparent 48%),
+    linear-gradient(165deg, #a9d8ff 0%, #cbe9ff 46%, #e6f5ff 100%);
+}
+
+html.light .space-bg-nebula-a {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+html.light .space-bg-nebula-b {
+  background: rgba(186, 230, 253, 0.28);
+}
+
+html.light .space-bg-nebula-c {
+  background: rgba(224, 242, 254, 0.22);
 }
 
 /* Stars Animation */
@@ -42,6 +106,12 @@ body {
   animation: twinkle 4s ease-in-out infinite;
 }
 
+html.light .space-bg-stars {
+  opacity: 0.22;
+  filter: saturate(0.5) blur(0.4px);
+  animation-duration: 6s;
+}
+
 @keyframes twinkle {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
@@ -57,6 +127,10 @@ body {
   background: linear-gradient(90deg, transparent, #fff, transparent);
   animation: shoot 8s ease-in-out infinite;
   opacity: 0;
+}
+
+html.light .shooting-star {
+  display: none;
 }
 
 @keyframes shoot {
@@ -95,6 +169,18 @@ body {
   background: #475569;
 }
 
+html.light ::-webkit-scrollbar-track {
+  background: #d8e6fb;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #a5bbdf;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #8ca6cf;
+}
+
 /* Glow Effects */
 .glow-purple {
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
@@ -108,5 +194,223 @@ body {
 ::selection {
   background: rgba(168, 85, 247, 0.3);
   color: #fff;
+}
+
+html.light ::selection {
+  background: rgba(59, 130, 246, 0.25);
+  color: #0b1f3e;
+}
+
+/* Light mode utility overrides for current dark-first classes */
+html.light .bg-slate-950,
+html.light .bg-slate-950\/90,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/50 {
+  background-color: var(--surface-2) !important;
+}
+
+html.light .bg-slate-900,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/70,
+html.light .bg-slate-900\/50,
+html.light .bg-slate-900\/40 {
+  background-color: var(--surface-1) !important;
+}
+
+html.light .bg-slate-800,
+html.light .bg-slate-800\/80,
+html.light .bg-slate-800\/60,
+html.light .bg-slate-800\/50 {
+  background-color: #e4eefc !important;
+}
+
+html.light .bg-slate-700,
+html.light .bg-slate-700\/50 {
+  background-color: #d7e5fa !important;
+}
+
+html.light .bg-slate-500\/20,
+html.light .bg-slate-500\/10 {
+  background-color: rgba(153, 174, 207, 0.2) !important;
+}
+
+html.light .border-slate-800,
+html.light .border-slate-800\/50,
+html.light .border-slate-700,
+html.light .border-slate-700\/80,
+html.light .border-slate-700\/50,
+html.light .border-slate-600,
+html.light .border-slate-500,
+html.light .border-slate-500\/30 {
+  border-color: var(--border-1) !important;
+}
+
+html.light .text-white {
+  color: #0f2445 !important;
+}
+
+html.light .bg-gradient-to-br.from-purple-600.to-blue-600 .text-white,
+html.light .bg-gradient-to-br.from-yellow-500.to-orange-500 .text-white,
+html.light .bg-gradient-to-br.from-purple-600.to-blue-600.text-white,
+html.light .bg-gradient-to-br.from-yellow-500.to-orange-500.text-white {
+  color: #ffffff !important;
+}
+
+html.light .bg-gradient-to-br.from-purple-600.to-blue-600 svg,
+html.light .bg-gradient-to-br.from-yellow-500.to-orange-500 svg {
+  color: #ffffff !important;
+}
+
+html.light .text-slate-200 {
+  color: #2f4970 !important;
+}
+
+html.light .text-slate-300 {
+  color: #425b80 !important;
+}
+
+html.light .text-slate-400 {
+  color: var(--muted) !important;
+}
+
+html.light .text-slate-500 {
+  color: #6d82a4 !important;
+}
+
+html.light .text-slate-600 {
+  color: #7c8faf !important;
+}
+
+html.light .text-slate-700 {
+  color: #54688b !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: #0f3267 !important;
+}
+
+html.light .hover\:bg-slate-800:hover,
+html.light .hover\:bg-slate-800\/70:hover,
+html.light .hover\:bg-slate-800\/50:hover {
+  background-color: #d9e7fa !important;
+}
+
+html.light .hover\:bg-slate-700:hover,
+html.light .hover\:bg-slate-700\/50:hover {
+  background-color: #cddff7 !important;
+}
+
+/* Light mode purple artifact normalization */
+html.light .text-purple-300 {
+  color: #3b82f6 !important;
+}
+
+html.light .text-purple-400 {
+  color: #2563eb !important;
+}
+
+html.light .text-purple-500 {
+  color: #1d4ed8 !important;
+}
+
+html.light .hover\:text-purple-300:hover,
+html.light .hover\:text-purple-400:hover {
+  color: #1d4ed8 !important;
+}
+
+html.light .bg-purple-500\/10 {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+}
+
+html.light .bg-purple-500\/20 {
+  background-color: rgba(59, 130, 246, 0.18) !important;
+}
+
+html.light .bg-purple-500\/30 {
+  background-color: rgba(37, 99, 235, 0.2) !important;
+}
+
+html.light .bg-purple-600 {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+html.light .bg-purple-700 {
+  background-color: #0369a1 !important;
+  color: #ffffff !important;
+}
+
+html.light .bg-purple-700\/50 {
+  background-color: rgba(3, 105, 161, 0.32) !important;
+  color: #ffffff !important;
+}
+
+html.light .border-purple-400,
+html.light .border-purple-500,
+html.light .border-purple-500\/20,
+html.light .border-purple-500\/30,
+html.light .border-purple-500\/50 {
+  border-color: rgba(37, 99, 235, 0.35) !important;
+}
+
+html.light .bg-gradient-to-br.from-purple-600.to-blue-600 {
+  background-image: linear-gradient(to bottom right, #2563eb, #0891b2) !important;
+}
+
+html.light .bg-gradient-to-r.from-purple-600.to-blue-600 {
+  background-image: linear-gradient(to right, #2563eb, #0891b2) !important;
+}
+
+html.light .bg-gradient-to-r.from-purple-700.to-blue-700 {
+  background-image: linear-gradient(to right, #1d4ed8, #0e7490) !important;
+}
+
+html.light .bg-gradient-to-r.from-purple-500.to-blue-500 {
+  background-image: linear-gradient(to right, #3b82f6, #06b6d4) !important;
+}
+
+html.light .bg-gradient-to-r.from-purple-400.via-pink-400.to-blue-400 {
+  background-image: linear-gradient(to right, #2563eb, #38bdf8, #0ea5e9) !important;
+}
+
+/* Light mode button palette normalization */
+html.light button.bg-sky-600,
+html.light a.bg-sky-600,
+html.light button.bg-gradient-to-r,
+html.light a.bg-gradient-to-r,
+html.light button.bg-purple-600,
+html.light a.bg-purple-600 {
+  color: #ffffff !important;
+}
+
+html.light button.bg-purple-600,
+html.light a.bg-purple-600 {
+  background-color: #0284c7 !important;
+}
+
+html.light button.hover\:bg-purple-700:hover,
+html.light a.hover\:bg-purple-700:hover {
+  background-color: #0369a1 !important;
+}
+
+html.light button.bg-gradient-to-r.from-purple-600.to-blue-600,
+html.light a.bg-gradient-to-r.from-purple-600.to-blue-600 {
+  background-image: linear-gradient(to right, #0284c7, #0891b2) !important;
+}
+
+html.light button.hover\:from-purple-700.hover\:to-blue-700:hover,
+html.light a.hover\:from-purple-700.hover\:to-blue-700:hover {
+  background-image: linear-gradient(to right, #0369a1, #0e7490) !important;
+}
+
+html.light input,
+html.light textarea,
+html.light select {
+  color: #0f2445;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #7d90ae;
 }
 
